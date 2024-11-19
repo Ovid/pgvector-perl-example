@@ -7,6 +7,7 @@ class AI::Vector::PgVector::Embeddings::OpenAI {
     use OpenAPI::Client::OpenAI;
     use Carp                        qw(carp croak);
     use AI::Vector::PgVector::Types qw(
+      compile
       ArrayRef
       Enum
       NonEmptyStr
@@ -31,12 +32,8 @@ class AI::Vector::PgVector::Embeddings::OpenAI {
     }
 
     method get_embeddings($texts) {
-        state $input_strings
-          = NonEmptyStr | ArrayRef [NonEmptyStr];
-        unless ( $input_strings->check($texts) ) {
-            croak
-              "Invalid input. Input must be a string or an arrayref of strings";
-        }
+        state $check = compile( NonEmptyStr | ArrayRef [NonEmptyStr] );
+        ($texts) = $check->($texts);
 
         my $response = $openai->createEmbedding(
             {
@@ -47,7 +44,7 @@ class AI::Vector::PgVector::Embeddings::OpenAI {
             },
         );
 
-        if ( $verbose ) {
+        if ($verbose) {
             p $response;
         }
 
