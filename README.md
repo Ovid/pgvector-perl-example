@@ -44,6 +44,33 @@ Note that the ports and passwords are set to very specific values to allow
 this demo to work. In a production environment, you would want to use more
 secure/robust settings.
 
+# OpenAI
+
+In order to use PgVector, you need to have a source of "embeddings". These are
+vectors that represent the meaning of words. Sadly, Perl doesn't have a good
+library for this, so we will use OpenAI's embeddings API.
+
+To use this module, you’ll need an API key from OpenAI. Visit [OpenAI’s
+platform website](https://platform.openai.com/docs/overview). You’ll need to
+sign up or log in to that page.
+
+Once logged in, click on your profile icon at the top-right corner of the page.
+Select “Your profile” and then click on the “User API Keys” tab. As of this
+writing, it will have a useful message saying “User API keys have been replaced
+by project API keys,” so you need to click on the “View project API keys”
+button.
+
+On the Project API Keys page, click “Create new secret key” and give it a
+memorable name. You won’t be able to see that key again, so you’ll need to copy
+
+The key needs to be stored in the OPENAI_API_KEY environment variable. For
+Linux/Mac users the following line in whichever “rc” or “profile” file is
+appropriate for your system:
+
+```bash
+export OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
 # Using PgVector in Perl
 
 Most of our code is in the `lib` directory. You can use the following simple
@@ -60,7 +87,7 @@ use lib 'lib';
 use AI::Vector::PgVector;
 use DDP;
 
-my $pgvector = AI::Vector::PgVector->new( verbose => 1 );
+my $pgvector = AI::Vector::PgVector->new;
 
 $pgvector->build_db;
 my $results = $pgvector->query( 'books about ghosts', 1.3 );
