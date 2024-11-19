@@ -71,6 +71,21 @@ appropriate for your system:
 export OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
+If you don't want to use OpenAI for the embeddings, you might want to write a
+small microservice in a language that has good support for embeddings, such as
+Python or Node.js. Having that run on a box with a GPU is recommended.
+
+If you go this route, be sure that when trying this code, you adjust the
+embedding size to match the size of the embeddings you are using.
+
+```perl
+use AI::Vector::PgVector;
+my $pgvector = AI::Vector::PgVector->new(
+    embedding_size => 2024,
+);
+$pgvector->build_db; # or -> rebuild_db if you're already built it
+```
+
 # Using PgVector in Perl
 
 Most of our code is in the `lib` directory. You can use the following simple

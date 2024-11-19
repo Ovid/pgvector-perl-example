@@ -15,7 +15,8 @@ class AI::Vector::PgVector {
     );
 
     field $verbose :param :reader = 0;
-    field $dbh = DBI->connect(
+    field $embedding_size :param  = 1536;
+    field $dbh                    = DBI->connect(
         "dbi:Pg:dbname=pgvector_perl_test;host=localhost;port=55431",
         "postgres",
         "mysecretpassword",
@@ -147,7 +148,7 @@ class AI::Vector::PgVector {
     }
 
     method _get_schema () {
-        return <<~'SQL';
+        return sprintf <<~'SQL', $embedding_size;
         CREATE EXTENSION IF NOT EXISTS vector;
 
         CREATE TABLE book_genres (
@@ -168,7 +169,7 @@ class AI::Vector::PgVector {
         CREATE TABLE book_embeddings (
             book_embedding_id SERIAL PRIMARY KEY,
             book_id          INTEGER NOT NULL REFERENCES books(book_id),
-            embedding        vector(1536) NOT NULL,
+            embedding        vector(%d) NOT NULL,
             created_at       TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             updated_at       TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             UNIQUE(book_id)
@@ -309,6 +310,8 @@ Creates a new instance of the PgVector AI module.
 =over 4
 
 =item * C<verbose> - If set to a true value, will print debugging information.
+
+=item * C<embedding_size> - The size of the embeddings to use. Optional. Defaults to 1536.
 
 =back
 
