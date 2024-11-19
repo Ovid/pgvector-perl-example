@@ -33,7 +33,7 @@ class AI::Vector::PgVector {
           WITH book_distances AS (
               SELECT b.book_id,
                      b.title,
-                     ROUND((be.embedding <-> ?)::numeric, 2) AS rounded_distance,
+                     ROUND((be.embedding <=> ?)::numeric, 2) AS rounded_distance,
                      b.summary,
                      g.name AS genre
               FROM   books b
