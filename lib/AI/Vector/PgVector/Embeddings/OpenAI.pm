@@ -39,7 +39,7 @@ class AI::Vector::PgVector::Embeddings::OpenAI {
             {
                 body => {
                     input => $texts,
-                    model => "text-embedding-3-small"
+                    model => $model,
                 }
             },
         );
