@@ -9,6 +9,8 @@ However, often we want to search data for the _meaning_ of the data, not just
 the text. For example, we might want to search for "dog" and find "puppy" or
 "canine" as well. This is where the PgVector extension for PostgreSQL comes in.
 
+[Read the article this repository was created for](https://curtispoe.org/articles/using-vector-databases-with-perl.html).
+
 # Setup
 
 First, you need to install the PgVector extension. You can find the project
